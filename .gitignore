@@ -16,3 +16,5 @@ amplify-gradle-config.json
 amplifyxc.config
 
 package-lock.json
+
+/config/dev.js

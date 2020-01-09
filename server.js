@@ -1,36 +1,10 @@
 const { GraphQLServer } = require('graphql-yoga')
 
-// example goal
-const typeDefs = `
-    type Query {
-        id: ID!
-        title: String!
-        notes: [String]
-        points: Int!
-        completed: Boolean
-        category: String
-    }
-`
+// connect to db
+require('./config/db')()
 
-const resolvers = {
-    Query: {
-        title: () => {
-            return 'Shoot hoops for an hour'
-        },
-        notes: () => {
-            return []
-        },
-        points: () => {
-            return 1
-        },
-        completed: () => {
-            return false
-        },
-        category: () => {
-            return 'Physical'
-        },
-    }
-}
+const typeDefs = require('./typeDefs')
+const resolvers = require('./resolvers')
 
 const server = new GraphQLServer({
     typeDefs,
