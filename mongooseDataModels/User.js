@@ -19,6 +19,42 @@ const UserSchema = new Schema({
     dateCreated: {
         type: Date,
         default: Date.now()
+    },
+    totalScoreAllTime: {
+        type: Number,
+        default: 0
+    },
+    totalScoreDay: {
+        type: Number,
+        default: 0
+    },
+    totalScoreWeek: {
+        type: Number,
+        default: 0
+    },
+    totalScoreMonth: {
+        type: Number,
+        default: 0
+    },
+    totalScoreGroup: [{
+        groupId: {
+            type: String,
+            default: 'null_group_id',
+            required: true
+        },
+        score: {
+            type: Number,
+            default: 0,
+            required: true
+        }
+    }],
+    groups: {
+        type: [ String ],
+        default: 0
+    },
+    completedGoals: {
+        type: [ String ],
+        default: []
     }
 })
 
