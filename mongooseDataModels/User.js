@@ -50,7 +50,7 @@ const UserSchema = new Schema({
     }],
     groups: {
         type: [ String ],
-        default: 0
+        default: []
     },
     completedGoals: {
         type: [ String ],

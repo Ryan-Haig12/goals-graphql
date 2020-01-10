@@ -1,26 +1,9 @@
 const User = require('../mongooseDataModels/User')
 
+const { createUser, getUser, loginUser, deleteUser } = require('./auth')
+
 const resolvers = {
     Query: {
-        goalTest: () => {
-            return {
-                title: 'Shoot hoops for an hour',
-                notes: [],
-                points: 1,
-                completed: false,
-                category: 'Physical',
-            }
-        },
-
-        getGoal: (parent, args, ctx, info) => {
-            return {
-                title: 'Shoot hoops for an hour',
-                notes: [],
-                points: 1,
-                completed: false,
-                category: 'Physical',
-            }
-        },
 
         getUser: async (parent, args, ctx, info) => {
 
@@ -34,6 +17,11 @@ const resolvers = {
                 password
             }
         },
+
+        createUser,
+        getUser,
+        loginUser,
+        deleteUser
     }
 }
 
