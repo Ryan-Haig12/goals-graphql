@@ -113,9 +113,37 @@ const deleteUser = async (parent, args, ctx, info) => {
     }
 }
 
+const updateUser = async (parent, args, ctx, info) => {
+
+    const { id, data } = args
+    const { name, email } = data
+
+    const user = await User.findById({ _id: id })
+
+    if(!user) {
+        return {
+            errors: [ `User ${ id } not found!` ]
+        }
+    }
+    
+    if(name) user._doc.name = name
+    if(email) user._doc.email = email
+
+    try {
+        await user.save()
+
+        return {
+            ...user._doc, id
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     createUser,
     getUser,
     loginUser,
-    deleteUser
+    deleteUser,
+    updateUser
 }

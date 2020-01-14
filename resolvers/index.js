@@ -1,27 +1,20 @@
-const User = require('../mongooseDataModels/User')
-
-const { createUser, getUser, loginUser, deleteUser } = require('./auth')
+const { createUser, getUser, loginUser, deleteUser, updateUser } = require('./auth')
+const { createGoal, updateGoal, deleteGoal } = require('./goals')
 
 const resolvers = {
     Query: {
-
-        getUser: async (parent, args, ctx, info) => {
-
-            const data = await User.find({ name: args.name })
-            const { _id, name, email, password } = data[0]
-
-            return {
-                id: _id,
-                name,
-                email,
-                password
-            }
-        },
-
-        createUser,
         getUser,
         loginUser,
-        deleteUser
+    },
+
+    Mutation: {
+        createUser,
+        updateUser,
+        deleteUser,
+
+        createGoal,
+        updateGoal,
+        deleteGoal
     }
 }
 

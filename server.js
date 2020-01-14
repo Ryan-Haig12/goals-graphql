@@ -3,11 +3,10 @@ const { GraphQLServer } = require('graphql-yoga')
 // connect to db
 require('./config/db')()
 
-const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 
 const server = new GraphQLServer({
-    typeDefs,
+    typeDefs: './schema.graphql',
     resolvers
 })
 

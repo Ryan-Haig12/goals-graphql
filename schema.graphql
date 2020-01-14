@@ -1,0 +1,69 @@
+type Query {
+    getUser(id: ID, email: String): User!
+    loginUser(email: String!, password: String!): User!
+}
+
+type Mutation {
+    createUser(data: CreateUserInput): User!
+    updateUser(id: ID!, data: UpdateUserInput ): User!
+    deleteUser(id: ID!): User!
+
+    createGoal(data: CreateGoalInput): Goal!
+    updateGoal(id: ID!, data: UpdateGoalInput): Goal!
+    deleteGoal(id: ID!): Goal!
+}
+
+input CreateUserInput {
+    name: String!
+    email: String!
+    password: String!
+    password2: String!
+}
+
+input UpdateUserInput {
+    name: String
+    email: String
+}
+
+input CreateGoalInput {
+    title: String!
+    points: Int!
+    category: String!
+}
+
+input UpdateGoalInput {
+    title: String
+    points: Int
+    category: String
+}
+
+type User {
+    id: ID
+    name: String
+    email: String
+    password: String
+    dateCreated: String
+    errors: [ String ]
+    totalScoreAllTime: Int
+    totalScoreDay: Int
+    totalScoreWeek: Int
+    totalScoreMonth: Int
+    totalScoreGroup: [ TotalScoreGroup ]
+    groups: [ String ]
+    completedGoals: [ String ]
+    jwt: String
+}
+
+type Goal {
+    id: ID
+    title: String
+    notes: [ String ]
+    points: Int
+    category: String
+    errors: [ String ]
+}
+
+type TotalScoreGroup {
+    groupId: String
+    score: Int
+}
