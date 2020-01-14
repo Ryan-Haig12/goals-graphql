@@ -1,5 +1,6 @@
-const { createUser, getUser, loginUser, deleteUser, updateUser } = require('./auth')
+const { createUser, getUser, loginUser, deleteUser, updateUser } = require('./user')
 const { createGoal, updateGoal, deleteGoal } = require('./goals')
+const { createGroup } = require('./group')
 
 const resolvers = {
     Query: {
@@ -14,7 +15,9 @@ const resolvers = {
 
         createGoal,
         updateGoal,
-        deleteGoal
+        deleteGoal,
+
+        createGroup
     }
 }
 

@@ -11,6 +11,8 @@ type Mutation {
     createGoal(data: CreateGoalInput): Goal!
     updateGoal(id: ID!, data: UpdateGoalInput): Goal!
     deleteGoal(id: ID!): Goal!
+
+    createGroup(data: CreateGroupInput): Group!
 }
 
 input CreateUserInput {
@@ -35,6 +37,10 @@ input UpdateGoalInput {
     title: String
     points: Int
     category: String
+}
+
+input CreateGroupInput {
+    groupName: String!
 }
 
 type User {
@@ -66,4 +72,12 @@ type Goal {
 type TotalScoreGroup {
     groupId: String
     score: Int
+}
+
+type Group {
+    id: ID
+    groupCreator: ID
+    groupName: String
+    groupMembers: [ ID ]
+    errors: [ String ]
 }

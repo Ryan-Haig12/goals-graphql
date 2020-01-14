@@ -1,8 +1,13 @@
-const Goal = require('../../mongooseDataModels/Goal')
+const Goal = require('../mongooseDataModels/Goal')
 
-const createGoal = async (parent, args, ctx, info) => {
-    const { title, points, category } = args
+const createGoal = async (parent, args, { jwt }, info) => {
+    const { title, points, category } = args.data
     let errors = []
+
+    if(!jwt) {
+        errors.push('You must be authed to use this endpoint')
+        return { errors }   
+    }
 
     const newGoal = new Goal({
         title, points, category
@@ -20,7 +25,6 @@ const createGoal = async (parent, args, ctx, info) => {
     } catch(err) {
         console.log('server done broke')
     }
-    console.log(newGoal)
 
     return { ...newGoal._doc, id: newGoal._doc._id }
 }
@@ -36,9 +40,7 @@ const updateGoal = async (parent, args, ctx, info) => {
     try {
         await goal.save()
 
-        return {
-            ...goal._doc, id, title, points, category
-        }
+        return { ...goal._doc, id, title, points, category }
     } catch(err) {
         console.log(err)
     }

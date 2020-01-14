@@ -1,9 +1,9 @@
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { jwtsecret } = require('../../config/keys')
+const { jwtsecret } = require('../config/keys')
 
-const User = require('../../mongooseDataModels/User')
+const User = require('../mongooseDataModels/User')
 
 const createUser = async (parent, args, ctx, info) => {
     const { name, email, password, password2 } = args
@@ -90,14 +90,17 @@ const loginUser = async (parent, args, ctx, info) => {
         // jwt for saved user
         const payload = {
             user: {
-                ...user._doc
+                ...user._doc,
+                password: null
             }
         }
         const token = jwt.sign(payload, jwtsecret, { expiresIn: 36000 })
         user._doc.jwt = token
         return {
             ...user._doc,
-            jwt: token
+            jwt: token,
+            password: null,
+            id: user._doc._id
         }
     } catch(err) {
         console.log(err)
@@ -109,7 +112,7 @@ const deleteUser = async (parent, args, ctx, info) => {
 
     const user = await User.findOneAndDelete({ id })
     return {
-        user
+        user, password: null
     }
 }
 

@@ -6,20 +6,14 @@ const GroupSchema = new Schema({
        type: String,
        required: true
    },
-   friends: [{
-       friendId: {
-           type: String,
-           required: true
-       },
-       totalScore: {
-           type: Number,
-           default: 0
-       },
-       completedGoals: {
-           type: [ String ],
-           default: []
-       }
-   }]
+   groupName: {
+       type: String,
+       required: true
+   },
+   groupMembers: {
+       type: [ String ],
+       default: []
+   }
 })
 
 module.exports = Group = mongoose.model('groups', GroupSchema)
