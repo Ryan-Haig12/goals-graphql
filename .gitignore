@@ -18,5 +18,3 @@ amplifyxc.config
 package-lock.json
 
 /config/dev.js
-
-/devUtils
