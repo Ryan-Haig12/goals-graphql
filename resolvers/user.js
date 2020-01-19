@@ -5,6 +5,8 @@ const { jwtsecret } = require('../config/keys')
 
 const User = require('../mongooseDataModels/User')
 
+const isGroupAdmin = require('../utils/isGroupAdmin')
+
 const createUser = async (parent, args, ctx, info) => {
     const { name, email, password, password2 } = args
 
@@ -70,9 +72,12 @@ const getUser = async (parent, args, ctx, info) => {
     }
 }
 
-const loginUser = async (parent, args, ctx, info) => {
+const loginUser = async (parent, args, { userJWT }, info) => {
     const { email, password } = args
     let errors = []
+
+    const isAdmin = isGroupAdmin(userJWT, "5e2416887f21ccb45d1e41d3")
+    console.log('fdasfdas', isAdmin)
 
     try {
         const user = await User.findOne({ email })

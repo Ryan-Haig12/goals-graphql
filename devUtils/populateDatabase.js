@@ -88,6 +88,7 @@ users.forEach(async el => {
     const newUser = new User({
         name: el.name,
         email: el.email,
+        groups: [],
         password: await genPassword()
     })
 
@@ -98,6 +99,7 @@ users.forEach(async el => {
             groupName: 'testhaig1 Group'
         })
         await newGroup.save()
+        newUser.groups.push(newGroup._doc._id)
     }
     else if(el.email === 'testhaig2@haig.com') {
         const newGroup = new Group({
@@ -105,6 +107,7 @@ users.forEach(async el => {
             groupName: 'testhaig2 Group'
         })
         await newGroup.save()
+        newUser.groups.push(newGroup._doc._id)
     }
 
     try {
@@ -114,8 +117,4 @@ users.forEach(async el => {
     }
 })
 
-console.log(
-    `You\'re ganna want/have to kill the server (Ctrl + C) in just a few moments...
-Whenever the Goals table hits ${ goals.length } and
-the Users table hits ${ users.length }`
-)
+console.log(`You\'re ganna want/have to kill the server (Ctrl + C) in just a few moments...`)

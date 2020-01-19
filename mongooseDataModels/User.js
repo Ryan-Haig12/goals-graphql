@@ -55,6 +55,10 @@ const UserSchema = new Schema({
     completedGoals: {
         type: [ String ],
         default: []
+    },
+    isSystemAdmin: {
+        type: Boolean,
+        default: false
     }
 })
 
