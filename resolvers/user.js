@@ -72,12 +72,9 @@ const getUser = async (parent, args, ctx, info) => {
     }
 }
 
-const loginUser = async (parent, args, { userJWT }, info) => {
+const loginUser = async (parent, args, ctx, info) => {
     const { email, password } = args
     let errors = []
-
-    const isAdmin = isGroupAdmin(userJWT, "5e2416887f21ccb45d1e41d3")
-    console.log('fdasfdas', isAdmin)
 
     try {
         const user = await User.findOne({ email })
