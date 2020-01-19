@@ -18,6 +18,10 @@ const GroupMessageSchema = new Schema({
         type: Date,
         default: Date.now()
     },
+    expirationTime: {
+        type: Date,
+        default: Date.now() + (60 * 60 * 24 * 1000)
+    },
 })
 
 module.exports = GroupMessage = mongoose.model('groupMessage', GroupMessageSchema)

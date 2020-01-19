@@ -1,6 +1,12 @@
 type Query {
     getUser(id: ID, email: String): User!
     loginUser(email: String!, password: String!): User!
+
+    getAllGoals: [ Goal! ]
+
+    getFinishedGoals(data: GetFinishedGoalsInput): [ FinishedGoal! ]
+
+    getGroupMessages(groupId: ID!): [ GroupMessage! ]
 }
 
 type Mutation {
@@ -72,6 +78,11 @@ input AddGroupMessageInput {
     timeWritten: String!
 }
 
+input GetFinishedGoalsInput {
+    userId: ID
+    groupId: ID
+}
+
 type User {
     id: ID
     name: String
@@ -126,4 +137,6 @@ type GroupMessage {
     authorId: ID
     groupId: ID
     timeWritten: String
+    expirationTime: String
+    errors: [ String ]
 }

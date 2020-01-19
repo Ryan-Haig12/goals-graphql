@@ -1,3 +1,6 @@
+const moment = require('moment')
+const _ = require('lodash')
+
 const GroupMessage = require('../mongooseDataModels/GroupMessage')
 
 const decodeJWT = require('../utils/decodeJWT')
@@ -23,6 +26,23 @@ const addGroupMessage = async (parent, args, { userJWT }, info) => {
     }
 }
 
+const getGroupMessages = async (parent, args, { userJWT }, info) => {
+    const { groupId } = args
+
+    let groupsMessages = await GroupMessage.find({ groupId })
+
+    // if groupMessage is over 24 hours old, delete it
+    groupsMessages.map(async ({ id, expirationTime }) => {
+        const isExpired = moment(expirationTime).unix() * 1000 < Date.now()
+        if(isExpired) {
+            await GroupMessage.findByIdAndDelete({ _id: id })
+        }
+    })
+
+    return groupsMessages
+}
+
 module.exports = {
-    addGroupMessage
+    addGroupMessage,
+    getGroupMessages,
 }

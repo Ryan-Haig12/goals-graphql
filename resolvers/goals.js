@@ -57,8 +57,14 @@ const deleteGoal = async (parent, args, ctx, info) => {
     }
 }
 
+const getAllGoals = async (parent, args, ctx, info) => {
+    const allGoals = await Goal.find({})
+    return allGoals
+}
+
 module.exports = {
     createGoal,
     updateGoal,
-    deleteGoal
+    deleteGoal,
+    getAllGoals
 }
