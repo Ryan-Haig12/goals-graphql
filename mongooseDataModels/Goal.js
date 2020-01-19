@@ -6,10 +6,6 @@ const GoalSchema = new Schema({
         type: String,
         required: true
     },
-    notes: {
-        type: [ String ],
-        default: []
-    },
     points: {
         type: Number,
         default: 1

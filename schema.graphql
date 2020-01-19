@@ -16,6 +16,10 @@ type Mutation {
     updateGroup(id: ID!, data: UpdateGroupInput): Group!
     addUserToGroup(id: ID!, data: AddUserToGroupInput): Group!
     deleteGroup(id: ID!): Group!
+
+    addFinishedGoal(data: AddFinishedGoalInput): FinishedGoal!
+
+    addGroupMessage(data: AddGroupMessageInput): GroupMessage!
 }
 
 input CreateUserInput {
@@ -52,6 +56,20 @@ input UpdateGroupInput {
 
 input AddUserToGroupInput {
     newUserId: String!
+}
+
+input AddFinishedGoalInput {
+    goalId: ID!
+    userId: ID!
+    groupId: ID!
+    timeCompleted: String!
+}
+
+input AddGroupMessageInput {
+    message: String!
+    authorId: ID!
+    groupId: ID!
+    timeWritten: String!
 }
 
 type User {
@@ -91,4 +109,21 @@ type Group {
     groupName: String
     groupMembers: [ ID ]
     errors: [ String ]
+}
+
+type FinishedGoal {
+    id: ID
+    goalId: ID
+    userId: ID
+    groupId: ID
+    timeCompleted: String
+    errors: [ String ]
+}
+
+type GroupMessage {
+    id: ID
+    message: String
+    authorId: ID
+    groupId: ID
+    timeWritten: String
 }
