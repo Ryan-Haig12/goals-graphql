@@ -5,7 +5,7 @@ const { jwtsecret } = require('../config/keys')
 
 const User = require('../mongooseDataModels/User')
 
-const isGroupAdmin = require('../utils/isGroupAdmin')
+//const isGroupAdmin = require('../utils/isGroupAdmin')
 
 const createUser = async (parent, args, ctx, info) => {
     const { name, email, password, password2 } = args.data
@@ -24,6 +24,16 @@ const createUser = async (parent, args, ctx, info) => {
 
     try {
         await newUser.save()
+
+        // jwt for saved user
+        const payload = {
+            user: {
+                ...newUser._doc,
+                password: null
+            }
+        }
+        const token = jwt.sign(payload, jwtsecret, { expiresIn: 36000 })
+        newUser.jwt = token
     } catch(err) {
         if(err.code === 11000) errors.push(`Email ${ email } already exists`)
         //errors.push(err.errmsg)
