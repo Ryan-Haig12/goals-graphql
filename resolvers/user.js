@@ -8,7 +8,7 @@ const User = require('../mongooseDataModels/User')
 const isGroupAdmin = require('../utils/isGroupAdmin')
 
 const createUser = async (parent, args, ctx, info) => {
-    const { name, email, password, password2 } = args
+    const { name, email, password, password2 } = args.data
 
     let errors = []
     if(!validator.isEmail(email)) errors.push('Valid Email is required')
