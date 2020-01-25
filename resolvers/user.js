@@ -95,7 +95,7 @@ const loginUser = async (parent, args, ctx, info) => {
 
         const isMatch = await bcrypt.compare(password, user.password)
         if(!isMatch) {
-            errors.push(`Password ${ password } does not match`)
+            errors.push(`Password is incorrect`)
             if(errors.length) return { errors }
         }
         
