@@ -15,6 +15,7 @@ const createUser = async (parent, args, ctx, info) => {
     if(!validator.isEmail(email)) errors.push('Valid Email is required')
     if(!validator.equals(password, password2)) errors.push('Passwords must match')
     if(!password || !password2) errors.push('Both passwords are required')
+    if(password && password.length < 6) errors.push('Password must be at least 6 characters')
     if(errors.length) return { errors }
 
     const salt = await bcrypt.genSalt(10)
