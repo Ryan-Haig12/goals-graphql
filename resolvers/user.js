@@ -12,6 +12,7 @@ const createUser = async (parent, args, ctx, info) => {
 
     let errors = []
     if(!name) errors.push('Name is required')
+    if(name && name.length < 6) errors.push('Name must be at least 6 characters')
     if(!validator.isEmail(email)) errors.push('Valid Email is required')
     if(!validator.equals(password, password2)) errors.push('Passwords must match')
     if(!password || !password2) errors.push('Both passwords are required')
