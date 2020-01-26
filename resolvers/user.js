@@ -90,6 +90,9 @@ const loginUser = async (parent, args, ctx, info) => {
     const { email, password } = args
     let errors = []
 
+    if(!password) errors.push('Password is required')
+    if(errors.length) return { errors }
+
     try {
         const user = await User.findOne({ email })
         if(user === null || user === undefined) {
