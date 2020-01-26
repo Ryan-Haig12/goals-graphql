@@ -11,8 +11,10 @@ const createUser = async (parent, args, ctx, info) => {
     const { name, email, password, password2 } = args.data
 
     let errors = []
+    if(!name) errors.push('Name is required')
     if(!validator.isEmail(email)) errors.push('Valid Email is required')
     if(!validator.equals(password, password2)) errors.push('Passwords must match')
+    if(!password || !password2) errors.push('Both passwords are required')
     if(errors.length) return { errors }
 
     const salt = await bcrypt.genSalt(10)
