@@ -90,6 +90,7 @@ const loginUser = async (parent, args, ctx, info) => {
     const { email, password } = args
     let errors = []
 
+    if(!email) errors.push('Email is required')
     if(!password) errors.push('Password is required')
     if(errors.length) return { errors }
 
