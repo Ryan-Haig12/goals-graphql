@@ -31,6 +31,13 @@ const getGroupMessages = async (parent, args, { userJWT }, info) => {
 
     let groupsMessages = await GroupMessage.find({ groupId })
 
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
+
     // if groupMessage is over 24 hours old, delete it
     groupsMessages.map(async ({ id, expirationTime }) => {
         const isExpired = moment(expirationTime).unix() * 1000 < Date.now()

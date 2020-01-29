@@ -1,11 +1,15 @@
 const Goal = require('../mongooseDataModels/Goal')
 
-const createGoal = async (parent, args, { jwt }, info) => {
+const decodeJWT = require('../utils/decodeJWT')
+
+const createGoal = async (parent, args, { userJWT }, info) => {
     const { title, points, category } = args.data
     let errors = []
 
-    if(!jwt) {
-        errors.push('You must be authed to use this endpoint')
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
         return { errors }   
     }
 
@@ -29,9 +33,16 @@ const createGoal = async (parent, args, { jwt }, info) => {
     return { ...newGoal._doc, id: newGoal._doc._id }
 }
 
-const updateGoal = async (parent, args, ctx, info) => {
+const updateGoal = async (parent, args, { userJWT }, info) => {
     const { id, data } = args
     const { title, points, category } = data
+
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
 
     const goal = await Goal.findByIdAndUpdate({ _id: id }, {
         title, points, category
@@ -46,8 +57,15 @@ const updateGoal = async (parent, args, ctx, info) => {
     }
 }
 
-const deleteGoal = async (parent, args, ctx, info) => {
+const deleteGoal = async (parent, args, { userJWT }, info) => {
     const { id } = args
+
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
 
     try {
         const goal = await Goal.findOneAndDelete({ _id: id })

@@ -5,6 +5,8 @@ const { jwtsecret } = require('../config/keys')
 
 const User = require('../mongooseDataModels/User')
 
+const decodeJWT = require('../utils/decodeJWT')
+
 //const isGroupAdmin = require('../utils/isGroupAdmin')
 
 const createUser = async (parent, args, ctx, info) => {
@@ -47,9 +49,16 @@ const createUser = async (parent, args, ctx, info) => {
     return newUser
 }
 
-const getUser = async (parent, args, ctx, info) => {
+const getUser = async (parent, args, { userJWT }, info) => {
     const { id, email } = args
     let errors = []
+
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
 
     if(email !== undefined) {
         if(!validator.isEmail(email)) errors.push('Valid Email is required')
@@ -127,19 +136,33 @@ const loginUser = async (parent, args, ctx, info) => {
     }
 }
 
-const deleteUser = async (parent, args, ctx, info) => {
+const deleteUser = async (parent, args, { userJWT }, info) => {
     const { id } = args
 
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
+    
     const user = await User.findOneAndDelete({ id })
     return {
         user, password: null
     }
 }
 
-const updateUser = async (parent, args, ctx, info) => {
+const updateUser = async (parent, args, { userJWT }, info) => {
 
     const { id, data } = args
     const { name, email } = data
+
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
 
     const user = await User.findById({ _id: id })
 
