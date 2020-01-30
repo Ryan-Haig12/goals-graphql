@@ -3,10 +3,10 @@ type Query {
     loginUser(email: String!, password: String!): User!
 
     getAllGoals: [ Goal! ]
-
     getFinishedGoals(data: GetFinishedGoalsInput): [ FinishedGoal! ]
 
     getGroupMessages(groupId: ID!): [ GroupMessage! ]
+    getGroup(groupId: ID!): Group!
 }
 
 type Mutation {

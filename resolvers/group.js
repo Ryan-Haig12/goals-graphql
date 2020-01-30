@@ -27,6 +27,28 @@ const createGroup = async (parent, args, { userJWT }, info) => {
     }
 }
 
+const getGroup = async (parent, args, { userJWT }, info) => {
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
+    const { groupId } = args
+    let errors = []
+    
+    try {
+        const group = await Group.findById({ _id: groupId })
+        if(!group) {
+            errors.push(`Group ${ groupId } was not found`)
+            return { errors }
+        }
+        return group
+    } catch(err) {
+        errors.push(`${ groupId } is not a valid MongoDB id`)
+        return { errors }
+    }
+}
+
 const updateGroup = async (parent, args, { userJWT }, info) => {
     const { id, data } = args
     const { groupName } = data
@@ -140,6 +162,7 @@ const deleteGroup = async (parent, args, { userJWT }, info) => {
 module.exports = {
     createGroup,
     updateGroup,
+    getGroup,
     addUserToGroup,
     deleteGroup
 }
