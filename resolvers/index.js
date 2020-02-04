@@ -1,6 +1,6 @@
 const { createUser, getUser, loginUser, deleteUser, updateUser } = require('./user')
 const { createGoal, updateGoal, deleteGoal, getAllGoals } = require('./goals')
-const { createGroup, updateGroup, getGroup, addUserToGroup, deleteGroup } = require('./group')
+const { createGroup, updateGroup, getGroup, getAllUsersGroups, addUserToGroup, deleteGroup } = require('./group')
 const { addFinishedGoal, getFinishedGoals } = require('./finishedGoals')
 const { addGroupMessage, getGroupMessages } = require('./groupMessage')
 
@@ -15,6 +15,7 @@ const resolvers = {
 
         getGroupMessages,
         getGroup,
+        getAllUsersGroups
     },
 
     Mutation: {

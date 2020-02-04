@@ -38,6 +38,7 @@ const updateGoal = async (parent, args, { userJWT }, info) => {
     const { title, points, category } = data
 
     // auth patron
+    let errors = []
     const decoded = decodeJWT(userJWT)
     if(decoded.status === 'error') {
         errors.push(decoded.msg)
@@ -61,6 +62,7 @@ const deleteGoal = async (parent, args, { userJWT }, info) => {
     const { id } = args
 
     // auth patron
+    let errors = []
     const decoded = decodeJWT(userJWT)
     if(decoded.status === 'error') {
         errors.push(decoded.msg)

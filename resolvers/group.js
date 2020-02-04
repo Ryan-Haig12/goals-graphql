@@ -17,7 +17,7 @@ const createGroup = async (parent, args, { userJWT }, info) => {
     try {
         const groupCreator = decoded._id
         const newGroup = new Group({
-            groupCreator, groupName
+            groupCreator, groupName, groupMembers: [ groupCreator ]
         })
         await newGroup.save()
 
@@ -29,12 +29,12 @@ const createGroup = async (parent, args, { userJWT }, info) => {
 
 const getGroup = async (parent, args, { userJWT }, info) => {
     const decoded = decodeJWT(userJWT)
+    let errors = []
     if(decoded.status === 'error') {
         errors.push(decoded.msg)
         return { errors }   
     }
     const { groupId } = args
-    let errors = []
     
     try {
         const group = await Group.findById({ _id: groupId })
@@ -47,6 +47,28 @@ const getGroup = async (parent, args, { userJWT }, info) => {
         errors.push(`${ groupId } is not a valid MongoDB id`)
         return { errors }
     }
+}
+
+// Get all groups that the decoded.jwt id matches
+const getAllUsersGroups = async(parent, args, { userJWT }, info) => {
+    const decoded = decodeJWT(userJWT)
+    let errors = []
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return [{ errors }]   
+    }
+
+    // match the JWT userId and userId passed in via query
+    const { userId } = args
+    const { _id } = decoded
+    if(_id !== userId) {
+        errors.push('UserId does not match JWT._id')
+        return [{ errors }]
+    }
+
+    // only return groups that the user is a member of
+    const allUsersGroups = await Group.find({ groupMembers: userId })
+    return allUsersGroups
 }
 
 const updateGroup = async (parent, args, { userJWT }, info) => {
@@ -163,6 +185,7 @@ module.exports = {
     createGroup,
     updateGroup,
     getGroup,
+    getAllUsersGroups,
     addUserToGroup,
     deleteGroup
 }
