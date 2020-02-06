@@ -8,6 +8,8 @@ type Query {
     getGroupMessages(groupId: ID!): [ GroupMessage! ]
     getGroup(groupId: ID!): Group!
     getAllUsersGroups(userId: ID!): [ Group! ]
+
+    getCustomGoal(groupId: ID, creatorId: ID): [ CustomGoal! ]
 }
 
 type Mutation {
@@ -27,6 +29,10 @@ type Mutation {
     addFinishedGoal(data: AddFinishedGoalInput): FinishedGoal!
 
     addGroupMessage(data: AddGroupMessageInput): GroupMessage!
+
+    createCustomGoal(data: CreateCustomGoalInput): CustomGoal!
+    deleteCustomGoal(customGoalId: ID!): CustomGoal!
+    updateCustomGoal(data: UpdateCustomGoalInput): CustomGoal!
 }
 
 input CreateUserInput {
@@ -45,6 +51,22 @@ input CreateGoalInput {
     title: String!
     points: Int!
     category: String!
+}
+
+input CreateCustomGoalInput {
+    title: String!
+    points: Int!
+    category: String!
+    groupId: String!
+    customGoalCreator: String!
+}
+
+type UpdateCustomGoalInput {
+    title: String
+    points: Int
+    category: String
+    groupId: String
+    customGoalCreator: String!
 }
 
 input UpdateGoalInput {
@@ -104,10 +126,19 @@ type User {
 type Goal {
     id: ID
     title: String
-    notes: [ String ]
     points: Int
     category: String
     errors: [ String ]
+}
+
+type CustomGoal {
+    id: ID
+    title: String
+    points: Int
+    category: String
+    errors: [ String ]
+    groupId: ID
+    customGoalCreator: ID
 }
 
 type TotalScoreGroup {

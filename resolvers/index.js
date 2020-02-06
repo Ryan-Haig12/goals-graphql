@@ -3,6 +3,7 @@ const { createGoal, updateGoal, deleteGoal, getAllGoals } = require('./goals')
 const { createGroup, updateGroup, getGroup, getAllUsersGroups, addUserToGroup, deleteGroup } = require('./group')
 const { addFinishedGoal, getFinishedGoals } = require('./finishedGoals')
 const { addGroupMessage, getGroupMessages } = require('./groupMessage')
+const { createCustomGoal, getCustomGoal, deleteCustomGoal, updateCustomGoal } = require('./customGoal')
 
 const resolvers = {
     Query: {
@@ -12,6 +13,7 @@ const resolvers = {
         getAllGoals,
 
         getFinishedGoals,
+        getCustomGoal,
 
         getGroupMessages,
         getGroup,
@@ -35,6 +37,10 @@ const resolvers = {
         addFinishedGoal,
 
         addGroupMessage,
+
+        createCustomGoal,
+        deleteCustomGoal,
+        updateCustomGoal,
     }
 }
 
