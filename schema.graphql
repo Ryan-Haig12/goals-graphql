@@ -61,7 +61,7 @@ input CreateCustomGoalInput {
     customGoalCreator: String!
 }
 
-type UpdateCustomGoalInput {
+input UpdateCustomGoalInput {
     title: String
     points: Int
     category: String
