@@ -93,6 +93,32 @@ const getCustomGoal = async (parent, args, { userJWT }, info) => {
     }
 }
 
+// return all customGoals in an array of groupIds
+const getAllCustomGoalsByGroupArray = async (parent, args, { userJWT }, info) => {
+    const decoded = decodeJWT(userJWT)
+    let errors = []
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }
+    }
+
+    const { groupIds } = args
+    if(!groupIds.length) {
+        errors.push('No groupIds given')
+        return { errors }
+    }
+
+    try {
+        const allCustomGoals = groupIds.map(async groupId => {
+            return await CustomGoal.find({ groupId })
+        })
+        const data = await Promise.all(allCustomGoals)
+        return data[0]
+    } catch(err) {
+        console.log(err)
+    }   
+}
+
 const deleteCustomGoal = async (parent, args, { userJWT }, info) => {
     const decoded = decodeJWT(userJWT)
     let errors = []
@@ -152,4 +178,5 @@ module.exports = {
     getCustomGoal,
     deleteCustomGoal,
     updateCustomGoal,
+    getAllCustomGoalsByGroupArray
 }
