@@ -10,7 +10,7 @@ type Query {
     getAllUsersGroups(userId: ID!): [ Group! ]
 
     getCustomGoal(groupId: ID, creatorId: ID): [ CustomGoal! ]
-    getAllCustomGoalsByGroupArray(groupIds: [ ID ]): [ CustomGoal! ]
+    getAllCustomGoalsByGroupArray(groupIds: [ID]): [ CustomGoal! ]
 }
 
 type Mutation {

@@ -20,46 +20,6 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-    totalScoreAllTime: {
-        type: Number,
-        default: 0
-    },
-    totalScoreDay: {
-        type: Number,
-        default: 0
-    },
-    totalScoreWeek: {
-        type: Number,
-        default: 0
-    },
-    totalScoreMonth: {
-        type: Number,
-        default: 0
-    },
-    totalScoreGroup: [{
-        groupId: {
-            type: String,
-            default: 'null_group_id',
-            required: true
-        },
-        score: {
-            type: Number,
-            default: 0,
-            required: true
-        }
-    }],
-    groups: {
-        type: [ String ],
-        default: []
-    },
-    completedGoals: {
-        type: [ String ],
-        default: []
-    },
-    isSystemAdmin: {
-        type: Boolean,
-        default: false
-    }
 })
 
 module.exports = User = mongoose.model('users', UserSchema)
