@@ -1,4 +1,4 @@
-const { createUser, getUser, loginUser, deleteUser, updateUser } = require('./user')
+const { createUser, getUser, getMultipleUsersById, loginUser, deleteUser, updateUser } = require('./user')
 const { createGoal, updateGoal, deleteGoal, getAllGoals } = require('./goals')
 const { createGroup, updateGroup, getGroup, getAllUsersGroups, addUserToGroup, deleteGroup } = require('./group')
 const { addFinishedGoal, getFinishedGoals } = require('./finishedGoals')
@@ -8,6 +8,7 @@ const { createCustomGoal, getCustomGoal, deleteCustomGoal, updateCustomGoal, get
 const resolvers = {
     Query: {
         getUser,
+        getMultipleUsersById,
         loginUser,
 
         getAllGoals,

@@ -95,6 +95,26 @@ const getUser = async (parent, args, { userJWT }, info) => {
     }
 }
 
+// return all users in an array of userIds
+const getMultipleUsersById = async (parent, args, { userJWT }, info) => {
+    let errors = []
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
+    // get all users from db, sort through those
+    // this makes it only 1 call to db
+    try {
+        const allUsers = await User.find({})
+        const users = allUsers.filter(user => args.userIds.includes(user._id.toString()))
+        console.log(users)
+        return users
+    } catch(err) {
+        console.log(err)
+    }
+}
+
 const loginUser = async (parent, args, ctx, info) => {
     const { email, password } = args
     let errors = []
@@ -189,6 +209,7 @@ const updateUser = async (parent, args, { userJWT }, info) => {
 module.exports = {
     createUser,
     getUser,
+    getMultipleUsersById,
     loginUser,
     deleteUser,
     updateUser

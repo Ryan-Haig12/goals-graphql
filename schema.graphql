@@ -1,5 +1,6 @@
 type Query {
     getUser(id: ID, email: String): User!
+    getMultipleUsersById(userIds: [ID]!): [ User! ]
     loginUser(email: String!, password: String!): User!
 
     getAllGoals: [ Goal! ]
@@ -114,13 +115,6 @@ type User {
     password: String
     dateCreated: String
     errors: [ String ]
-    totalScoreAllTime: Int
-    totalScoreDay: Int
-    totalScoreWeek: Int
-    totalScoreMonth: Int
-    totalScoreGroup: [ TotalScoreGroup ]
-    groups: [ String ]
-    completedGoals: [ String ]
     jwt: String
 }
 
