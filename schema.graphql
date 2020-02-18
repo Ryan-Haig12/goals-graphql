@@ -26,6 +26,7 @@ type Mutation {
     createGroup(data: CreateGroupInput): Group!
     updateGroup(id: ID!, data: UpdateGroupInput): Group!
     addUserToGroup(data: AddUserToGroupInput): Group!
+    addUserToGroupByEmail(data: AddUserToGroupInput): Group!
     deleteGroup(id: ID!): Group!
 
     addFinishedGoal(data: AddFinishedGoalInput): FinishedGoal!
@@ -87,7 +88,8 @@ input UpdateGroupInput {
 
 input AddUserToGroupInput {
     groupId: ID!
-    newUserId: String!
+    newUserId: String
+    newUserEmail: String
 }
 
 input AddFinishedGoalInput {

@@ -137,12 +137,61 @@ const addUserToGroup = async (parent, args, { userJWT }, info) => {
         currentGroup.groupMembers.push(newUserId)
         await currentGroup.save()
 
-        // add groupId to user.groups
-        await User.findByIdAndUpdate({ _id: newUserId }, { $push: { groups: currentGroup._id } })
-
         // return group with newUser in group.groupMembers
         return { ...currentGroup._doc }
 
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+// This shit in AddUserToGroup.js is pissing me off, let's just create a new endpoint
+const addUserToGroupByEmail = async(parent, args, { userJWT }, info) => {
+    const { groupId, newUserEmail } = args.data
+    let errors = []
+
+    if(!newUserEmail || !groupId){
+        errors.push('Need to pass in newUserEmail and groupId')
+        return { errors }
+    }
+
+    //auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }
+    }
+
+    try {
+        // make sure group exists and the userJWT matches the groupCreator
+        const currentGroup = await Group.findById({ _id: groupId })
+        if(!currentGroup || currentGroup === undefined || currentGroup === null) {
+            errors.push(`Group ${ groupId } not found`)
+            return { errors }
+        }
+        if(!(decoded._id === currentGroup.groupCreator)) {
+            errors.push('User is not an admin for this group')
+            return { errors }
+        }
+
+        // grab user, ensure it exists
+        const user = await User.findOne({ email: newUserEmail })
+        console.log(user)
+        if(!user) {
+            errors.push(`User with email ${ newUserEmail } not found`)
+            return { errors }
+        }
+
+        // add newUserId to group.groupMembers if not already a member
+        if(currentGroup.groupMembers.includes(user.id)) {
+            errors.push(`User ${ newUserEmail } is already a member of group ${ currentGroup._id }`)
+            return { errors }
+        }
+        currentGroup.groupMembers.push(user.id)
+        await currentGroup.save()
+
+        // return group with newUser in group.groupMembers
+        return { ...currentGroup._doc }
     } catch(err) {
         console.log(err)
     }
@@ -186,5 +235,6 @@ module.exports = {
     getGroup,
     getAllUsersGroups,
     addUserToGroup,
+    addUserToGroupByEmail,
     deleteGroup
 }

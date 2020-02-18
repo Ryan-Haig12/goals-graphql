@@ -1,6 +1,6 @@
 const { createUser, getUser, getMultipleUsersById, loginUser, deleteUser, updateUser } = require('./user')
 const { createGoal, updateGoal, deleteGoal, getAllGoals } = require('./goals')
-const { createGroup, updateGroup, getGroup, getAllUsersGroups, addUserToGroup, deleteGroup } = require('./group')
+const { createGroup, updateGroup, getGroup, getAllUsersGroups, addUserToGroup, addUserToGroupByEmail, deleteGroup } = require('./group')
 const { addFinishedGoal, getFinishedGoals } = require('./finishedGoals')
 const { addGroupMessage, getGroupMessages } = require('./groupMessage')
 const { createCustomGoal, getCustomGoal, deleteCustomGoal, updateCustomGoal, getAllCustomGoalsByGroupArray } = require('./customGoal')
@@ -34,6 +34,7 @@ const resolvers = {
         createGroup,
         updateGroup,
         addUserToGroup,
+        addUserToGroupByEmail,
         deleteGroup,
 
         addFinishedGoal,
