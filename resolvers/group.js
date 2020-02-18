@@ -100,8 +100,7 @@ const updateGroup = async (parent, args, { userJWT }, info) => {
 }
 
 const addUserToGroup = async (parent, args, { userJWT }, info) => {
-    const { id, data } = args
-    const { newUserId } = data
+    const { groupId, newUserId } = args.data
     let errors = []
 
     if(!newUserId){
@@ -117,10 +116,10 @@ const addUserToGroup = async (parent, args, { userJWT }, info) => {
     }
 
     try {
-        const currentGroup = await Group.findById({ _id: id })
+        const currentGroup = await Group.findById({ _id: groupId })
 
         if(!currentGroup || currentGroup === undefined || currentGroup === null) {
-            errors.push(`Group ${ id } not found`)
+            errors.push(`Group ${ groupId } not found`)
             return { errors }
         }
 
