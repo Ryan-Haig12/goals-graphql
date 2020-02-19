@@ -97,6 +97,8 @@ input AddFinishedGoalInput {
     userId: ID!
     groupId: ID!
     timeCompleted: String!
+    minutesLogged: Int!
+    points: Int!
 }
 
 input AddGroupMessageInput {

@@ -22,7 +22,7 @@ const CompletedGoalSchema = new Schema({
         type: Number,
         required: true
     },
-    pointsScored: {
+    points: {
         type: Number,
         required: true
     }
