@@ -191,7 +191,8 @@ const addUserToGroupByEmail = async(parent, args, { userJWT }, info) => {
         await currentGroup.save()
 
         // return group with newUser in group.groupMembers
-        return { ...currentGroup._doc }
+        // updated to return groupId as well
+        return { id: groupId, ...currentGroup._doc }
     } catch(err) {
         console.log(err)
     }
