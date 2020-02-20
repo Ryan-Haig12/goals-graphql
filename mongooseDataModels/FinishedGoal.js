@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const CompletedGoalSchema = new Schema({
+const FinishedGoalSchema = new Schema({
     goalId: {
         type: String,
         required: true
@@ -28,4 +28,4 @@ const CompletedGoalSchema = new Schema({
     }
 })
 
-module.exports = CompletedGoal = mongoose.model('completedGoals', CompletedGoalSchema)
+module.exports = FinishedGoal = mongoose.model('finishedGoals', FinishedGoalSchema)
