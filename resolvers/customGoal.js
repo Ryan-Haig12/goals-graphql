@@ -113,7 +113,19 @@ const getAllCustomGoalsByGroupArray = async (parent, args, { userJWT }, info) =>
             return await CustomGoal.find({ groupId })
         })
         const data = await Promise.all(allCustomGoals)
-        return data[0]
+        
+        // this for sure isnt the prettiest code ever
+        // but it works
+        // 2ish hours of debugging for this mapper function right here
+        // i'm leaving it idc
+        let x = 0
+        let ret = data.map(group => {
+            return {
+                groupId: groupIds[x++],
+                customGoals: group
+            }
+        })
+        return ret
     } catch(err) {
         console.log(err)
     }   

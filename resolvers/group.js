@@ -237,5 +237,5 @@ module.exports = {
     getAllUsersGroups,
     addUserToGroup,
     addUserToGroupByEmail,
-    deleteGroup
+    deleteGroup,
 }
