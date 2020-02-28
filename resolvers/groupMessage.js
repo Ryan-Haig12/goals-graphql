@@ -5,7 +5,7 @@ const GroupMessage = require('../mongooseDataModels/GroupMessage')
 
 const decodeJWT = require('../utils/decodeJWT')
 
-const addGroupMessage = async (parent, args, { userJWT }, info) => {
+const addGroupMessage = async (parent, args, { userJWT, pubsub }, info) => {
     let errors = []
 
     const decoded = decodeJWT(userJWT)
@@ -20,9 +20,24 @@ const addGroupMessage = async (parent, args, { userJWT }, info) => {
         }) 
         await newGroupMessage.save()
 
+        pubsub.publish(`groupMessageSent ${newGroupMessage.groupId}`, { groupMessageSent: newGroupMessage })
+
         return { ...newGroupMessage._doc, id: newGroupMessage._doc._id }
     } catch(err) {
         console.log(err)
+    }
+}
+
+// subscription that returns a newGroupMessage when the 
+const groupMessageSent = {
+    subscribe: async (parent, { groupId }, { userJWT, pubsub }, info) => {
+        const group = await Group.findById({ _id: groupId })
+
+        if(!group) {
+            throw new Error(`GroupId ${ groupId } not found`)
+        }
+        
+        return pubsub.asyncIterator(`groupMessageSent ${groupId}`)
     }
 }
 
@@ -52,4 +67,5 @@ const getGroupMessages = async (parent, args, { userJWT }, info) => {
 module.exports = {
     addGroupMessage,
     getGroupMessages,
+    groupMessageSent
 }

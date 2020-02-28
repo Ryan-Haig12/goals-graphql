@@ -2,8 +2,10 @@ const { createUser, getUser, getMultipleUsersById, loginUser, deleteUser, update
 const { createGoal, updateGoal, deleteGoal, getAllGoals } = require('./goals')
 const { createGroup, updateGroup, getGroup, getAllUsersGroups, addUserToGroup, addUserToGroupByEmail, deleteGroup } = require('./group')
 const { addFinishedGoal, getFinishedGoals } = require('./finishedGoals')
-const { addGroupMessage, getGroupMessages } = require('./groupMessage')
+const { addGroupMessage, getGroupMessages, groupMessageSent } = require('./groupMessage')
 const { createCustomGoal, getCustomGoal, deleteCustomGoal, updateCustomGoal, getAllCustomGoalsByGroupArray } = require('./customGoal')
+
+const Group = require('../mongooseDataModels/Group')
 
 const resolvers = {
     Query: {
@@ -44,6 +46,10 @@ const resolvers = {
         createCustomGoal,
         deleteCustomGoal,
         updateCustomGoal,
+    },
+
+    Subscription: {
+        groupMessageSent
     }
 }
 
