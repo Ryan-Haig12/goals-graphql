@@ -3,7 +3,7 @@ type Query {
     getMultipleUsersById(userIds: [ID]!): [ User! ]
     loginUser(email: String!, password: String!): User!
 
-    getAllGoals: [ Goal! ]
+    getAllGoals: [ AllDefaultGoals ]
     getFinishedGoals(data: GetFinishedGoalsInput): [ FinishedGoal! ]
 
     getGroupMessages(groupId: ID!): [ GroupMessage! ]
@@ -139,6 +139,11 @@ type CustomGoal {
     errors: [ String ]
     groupId: ID
     customGoalCreator: ID
+}
+
+type AllDefaultGoals {
+    category: String,
+    goals: [ Goal ]
 }
 
 type AllGroupsCustomGoals {

@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const Goal = require('../mongooseDataModels/Goal')
 
 const decodeJWT = require('../utils/decodeJWT')
@@ -90,26 +92,30 @@ const getAllGoals = async (parent, args, ctx, info) => {
     // sort goals into alphabetical order by category
     allGoals.sort((a, b) => (a.category > b.category) ? 1 : -1)
 
-    // seperate allGoals into new arrays by category
-    let currentCategory = allGoals[0].category
-    let currentCategoryList = []
-    const splitCategories = {}
-    allGoals.map(goal => {
-        if(goal.category !== currentCategory) {
-            splitCategories[currentCategory] = currentCategoryList
-            currentCategory = goal.category
-            currentCategoryList = []
-        }
-        currentCategoryList.push(goal)
-        return 0 // <- just to remove console
-    })
-    splitCategories[currentCategory] = currentCategoryList // <- be sure to add the last array to the object
+    // Get all categories
+    const categories = _.uniq(allGoals.map(goal => goal.category))
 
-    for(let category in splitCategories) {
-        splitCategories[category].sort((a, b) => (a.title > b.title) ? 1 : -1)
-    }
-    console.log(currentCategoryList)
-    return allGoals
+    // set up data to be returned
+    const data = categories.map(category => {
+        return {
+            category,
+            goals: []
+        }
+    })
+    
+    // sort categories into proper data structure
+    allGoals.map(goal => {
+        data.map(d => {
+            if(d.category === goal.category) d.goals.push(goal)
+        })
+    })
+
+    // sort all title names in each category
+    data.map(d => {
+        d.goals.sort((a, b) => (a.title > b.title) ? 1 : -1)
+    })
+
+    return data
 }
 
 module.exports = {
