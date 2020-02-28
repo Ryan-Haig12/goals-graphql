@@ -80,7 +80,7 @@ const deleteGoal = async (parent, args, { userJWT }, info) => {
 }
 
 // i guess I should have called this "getAllDefaultGoals" but oh well
-const getAllGoals = async (parent, args, ctx, info) => {
+const getAllGoals = async (parent, args, { userJWT }, info) => {
     let errors = []
     const decoded = decodeJWT(userJWT)
     if(decoded.status === 'error') {

@@ -125,6 +125,13 @@ const getAllCustomGoalsByGroupArray = async (parent, args, { userJWT }, info) =>
                 customGoals: group
             }
         })
+
+        ret.map(d => {
+            if(d.customGoals.length) {
+                d.customGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
+            }
+        })
+
         return ret
     } catch(err) {
         console.log(err)
