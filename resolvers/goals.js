@@ -79,7 +79,36 @@ const deleteGoal = async (parent, args, { userJWT }, info) => {
 
 // i guess I should have called this "getAllDefaultGoals" but oh well
 const getAllGoals = async (parent, args, ctx, info) => {
+    let errors = []
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
+
     const allGoals = await Goal.find({})
+    // sort goals into alphabetical order by category
+    allGoals.sort((a, b) => (a.category > b.category) ? 1 : -1)
+
+    // seperate allGoals into new arrays by category
+    let currentCategory = allGoals[0].category
+    let currentCategoryList = []
+    const splitCategories = {}
+    allGoals.map(goal => {
+        if(goal.category !== currentCategory) {
+            splitCategories[currentCategory] = currentCategoryList
+            currentCategory = goal.category
+            currentCategoryList = []
+        }
+        currentCategoryList.push(goal)
+        return 0 // <- just to remove console
+    })
+    splitCategories[currentCategory] = currentCategoryList // <- be sure to add the last array to the object
+
+    for(let category in splitCategories) {
+        splitCategories[category].sort((a, b) => (a.title > b.title) ? 1 : -1)
+    }
+    console.log(currentCategoryList)
     return allGoals
 }
 
