@@ -111,6 +111,7 @@ input AddGroupMessageInput {
 input GetFinishedGoalsInput {
     userId: ID
     groupId: ID
+    goalId: ID
 }
 
 type User {

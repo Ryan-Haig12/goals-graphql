@@ -26,7 +26,7 @@ const addFinishedGoal = async (parent, args, { userJWT }, info) => {
 }
 
 const getFinishedGoals = async (parent, args, { userJWT }, info) => {
-    const { userId, groupId } = args.data
+    const { userId, groupId, goalId } = args.data
     let errors = []
 
     const decoded = decodeJWT(userJWT)
@@ -38,10 +38,12 @@ const getFinishedGoals = async (parent, args, { userJWT }, info) => {
     try {
         let userGoals = []
         let groupGoals = []
+        let goalGoals = [] // nice naming convention ryan
         if(userId) userGoals = await FinishedGoal.find({ userId })
         if(groupId) groupGoals = await FinishedGoal.find({ groupId })
+        if(goalId) goalGoals = await FinishedGoal.find({ goalId })
         
-        const allGoals = _.concat(userGoals, groupGoals)
+        const allGoals = _.concat(userGoals, groupGoals, goalGoals)
         const remainingGoals = _.uniqBy(allGoals, 'id')
 
         return remainingGoals
