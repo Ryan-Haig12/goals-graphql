@@ -41,7 +41,7 @@ const groupMessageSent = {
     }
 }
 
-const getGroupMessages = async (parent, args, { userJWT }, info) => {
+const getGroupMessages = async (parent, args, { userJWT, pubsub }, info) => {
     const { groupId } = args
 
     let groupsMessages = await GroupMessage.find({ groupId })

@@ -184,5 +184,5 @@ type GroupMessage {
 }
 
 type Subscription {
-    groupMessageSent(groupId: ID!): GroupMessage!
+    groupMessageSent(groupId: ID!): GroupMessage
 }
