@@ -176,7 +176,6 @@ const addUserToGroupByEmail = async(parent, args, { userJWT }, info) => {
 
         // grab user, ensure it exists
         const user = await User.findOne({ email: newUserEmail })
-        console.log(user)
         if(!user) {
             errors.push(`User with email ${ newUserEmail } not found`)
             return { errors }

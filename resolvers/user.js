@@ -108,7 +108,6 @@ const getMultipleUsersById = async (parent, args, { userJWT }, info) => {
     try {
         const allUsers = await User.find({})
         const users = allUsers.filter(user => args.userIds.includes(user._id.toString()))
-        console.log(users)
         return users
     } catch(err) {
         console.log(err)
