@@ -12,6 +12,8 @@ type Query {
 
     getCustomGoal(groupId: ID, creatorId: ID): [ CustomGoal! ]
     getAllCustomGoalsByGroupArray(groupIds: [ID]): [ AllGroupsCustomGoals ]
+
+    calcUserScore(data: CalcUserScoreInput): [ UserScoreReport ]
 }
 
 type Mutation {
@@ -114,6 +116,13 @@ input GetFinishedGoalsInput {
     goalId: ID
 }
 
+input CalcUserScoreInput {
+    userIds: [ ID ]!
+    groupId: ID!
+    startTime: String!
+    endTime: String!
+}
+
 type User {
     id: ID
     name: String
@@ -182,6 +191,12 @@ type GroupMessage {
     timeWritten: String
     expirationTime: String
     errors: [ String ]
+}
+
+type UserScoreReport {
+    userId: ID
+    score: Float
+    rank: Int
 }
 
 type Subscription {
