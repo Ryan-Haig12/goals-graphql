@@ -95,6 +95,21 @@ const getUser = async (parent, args, { userJWT }, info) => {
     }
 }
 
+// return decoded user by JWT
+// helps users stay logged in after refresh
+const getUserByJWT = async (parent, args, { userJWT }, info) => {
+    let errors = []
+
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
+
+    return { ...decoded, id: decoded._id, jwt: userJWT }
+}
+
 // return all users in an array of userIds
 const getMultipleUsersById = async (parent, args, { userJWT }, info) => {
     let errors = []
@@ -114,7 +129,7 @@ const getMultipleUsersById = async (parent, args, { userJWT }, info) => {
     }
 }
 
-const loginUser = async (parent, args, ctx, info) => {
+const loginUser = async (parent, args, { userJWT }, info) => {
     const { email, password } = args
     let errors = []
 
@@ -208,6 +223,7 @@ const updateUser = async (parent, args, { userJWT }, info) => {
 module.exports = {
     createUser,
     getUser,
+    getUserByJWT,
     getMultipleUsersById,
     loginUser,
     deleteUser,

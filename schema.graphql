@@ -1,5 +1,6 @@
 type Query {
     getUser(id: ID, email: String): User!
+    getUserByJWT: User!
     getMultipleUsersById(userIds: [ID]!): [ User! ]
     loginUser(email: String!, password: String!): User!
 
