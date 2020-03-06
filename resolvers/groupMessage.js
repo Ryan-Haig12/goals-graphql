@@ -46,9 +46,10 @@ const getGroupMessages = async (parent, args, { userJWT, pubsub }, info) => {
 
     // auth patron
     const decoded = decodeJWT(userJWT)
+    let errors = []
     if(decoded.status === 'error') {
         errors.push(decoded.msg)
-        return { errors }   
+        return [{ errors }]   
     }
 
     let groupsMessages = await GroupMessage.find({ groupId })

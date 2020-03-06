@@ -9,6 +9,14 @@ module.exports = ( userJWT ) => {
         }
     }
 
-    const decoded = jwt.verify(userJWT, jwtsecret)
-    return decoded.user
+    try {
+        const decoded = jwt.verify(userJWT, jwtsecret)
+
+        return decoded.user
+    } catch(err) {
+        return {
+            status: 'error',
+            msg: err.message
+        }
+    }
 }
