@@ -197,6 +197,7 @@ type UserScoreReport {
     userId: ID
     score: Float
     rank: Int
+    errors: [ String ]
 }
 
 type Subscription {

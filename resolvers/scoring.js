@@ -1,5 +1,6 @@
 const moment = require('moment')
 
+const decodeJWT = require('../utils/decodeJWT')
 const FinishedGoal = require('../mongooseDataModels/FinishedGoal')
 
 // take in an array of userIds, a single groupId, and 2 epoch times in milliseconds (startTime, endTime)
@@ -8,6 +9,13 @@ const FinishedGoal = require('../mongooseDataModels/FinishedGoal')
 // return an array of objects as: { UserId, totalPointsScored, rank }
 const calcUserScore = async (parent, args, { userJWT }, info) => {
     const { userIds, groupId, startTime, endTime } = args.data
+
+    let errors = []
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return [{ errors }]   
+    }
 
     let groupsFinishedGoals = await FinishedGoal.find({ groupId })
     let data = []
@@ -26,7 +34,7 @@ const calcUserScore = async (parent, args, { userJWT }, info) => {
         })
 
         data.push({
-            userId, score: score.toFixed(), rank: -1
+            userId, score: score.toFixed(2), rank: -1
         })
     })
 
