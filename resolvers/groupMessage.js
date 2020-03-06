@@ -53,16 +53,19 @@ const getGroupMessages = async (parent, args, { userJWT, pubsub }, info) => {
     }
 
     let groupsMessages = await GroupMessage.find({ groupId })
-
     // if groupMessage is over 24 hours old, delete it
-    groupsMessages.filter(async ({ id, expirationTime }) => {
-        const isExpired = moment(expirationTime).unix() * 1000 < Date.now()
+    let retMessages = []
+    groupsMessages.filter(async ( message ) => {
+        const isExpired = moment(message.expirationTime).unix() * 1000 < Date.now()
         if(isExpired) {
-            await GroupMessage.findByIdAndDelete({ _id: id })
+            await GroupMessage.findByIdAndDelete({ _id: message.id })
+            return false
         }
+        retMessages.push(message)
+        return true
     })
 
-    return groupsMessages
+    return retMessages
 }
 
 module.exports = {
