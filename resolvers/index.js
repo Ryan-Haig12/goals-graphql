@@ -26,6 +26,10 @@ const resolvers = {
         getAllUsersGroups,
 
         calcUserScore,
+
+        // simple test to make sure graphql is loaded
+        // also using for frontend test to look into re-usable hooks
+        ping: () => 'pong'
     },
 
     Mutation: {

@@ -117,4 +117,4 @@ users.forEach(async el => {
     }
 })
 
-console.log(`You\'re ganna want/have to kill the server (Ctrl + C) in just a few moments...`)
+ console.log(`You\'re ganna want/have to kill the server (Ctrl + C) in just a few moments...`)

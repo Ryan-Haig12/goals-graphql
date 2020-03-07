@@ -99,13 +99,13 @@ const getAllCustomGoalsByGroupArray = async (parent, args, { userJWT }, info) =>
     let errors = []
     if(decoded.status === 'error') {
         errors.push(decoded.msg)
-        return { errors }
+        return [{ errors }]
     }
 
     const { groupIds } = args
     if(!groupIds.length) {
         errors.push('No groupIds given')
-        return { errors }
+        return [{ errors }]
     }
 
     try {
