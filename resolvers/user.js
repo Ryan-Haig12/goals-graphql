@@ -107,7 +107,7 @@ const getUserByJWT = async (parent, args, { userJWT }, info) => {
         return { errors }   
     }
 
-    return { ...decoded, id: decoded._id, jwt: userJWT }
+    return { ...decoded, id: decoded._id, jwt: userJWT, password: null }
 }
 
 // return all users in an array of userIds

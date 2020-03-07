@@ -85,7 +85,7 @@ const getAllGoals = async (parent, args, { userJWT }, info) => {
     const decoded = decodeJWT(userJWT)
     if(decoded.status === 'error') {
         errors.push(decoded.msg)
-        return { errors }   
+        return [{ errors }]   
     }
 
     const allGoals = await Goal.find({})
