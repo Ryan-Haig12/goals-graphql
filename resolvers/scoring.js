@@ -39,7 +39,7 @@ const calcUserScore = async (parent, args, { userJWT }, info) => {
     })
 
     let count = 1
-    data.sort((a, b) => (a.score < b.score) ? 1 : -1)
+    data.sort((a, b) => (parseInt(a.score) < parseInt(b.score)) ? 1 : -1)
     data.map(d => d.rank = count++)
 
     return data
