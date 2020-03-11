@@ -116,7 +116,7 @@ const getMultipleUsersById = async (parent, args, { userJWT }, info) => {
     const decoded = decodeJWT(userJWT)
     if(decoded.status === 'error') {
         errors.push(decoded.msg)
-        return { errors }   
+        return [{ errors }]   
     }
     // get all users from db, sort through those
     // this makes it only 1 call to db
