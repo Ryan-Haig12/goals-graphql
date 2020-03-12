@@ -15,6 +15,7 @@ type Query {
     getAllCustomGoalsByGroupArray(groupIds: [ID]): [ AllGroupsCustomGoals ]
 
     calcUserScore(data: CalcUserScoreInput): [ UserScoreReport ]
+    calcUserStat(userId: ID!): UserStatReport
     
     ping: String!
 }
@@ -200,6 +201,25 @@ type UserScoreReport {
     userId: ID
     score: Float
     rank: Int
+    errors: [ String ]
+}
+
+type TimeScoreReport {
+    totalTimeLogged: Int
+    totalPointsScored: Float
+}
+
+type UserStatReport {
+    lastFiveFinishedGoals: [ Goal ]
+    totalGoalsCompleted: Int
+    totalTimeLogged: Int
+    totalPointsScored: Float
+    favoriteGoal: Goal
+    oneWeek: TimeScoreReport
+    oneMonth: TimeScoreReport
+    threeMonths: TimeScoreReport
+    sixMonths: TimeScoreReport
+    oneYear: TimeScoreReport
     errors: [ String ]
 }
 
