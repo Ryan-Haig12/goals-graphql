@@ -65,6 +65,14 @@ const getGroupMessages = async (parent, args, { userJWT, pubsub }, info) => {
         return true
     })
 
+    // if groupMessages returned exceeds 10, delete the oldest (11th)
+    // groupMessage, only return 10 groupMessages at once
+    if(retMessages.length > 10) {
+        const messagesToDelete = retMessages.splice(0, retMessages.length - 10)
+        messagesToDelete.map(async message => await GroupMessage.findByIdAndDelete({ _id: message.id }))
+        retMessages = retMessages.splice(retMessages.length - 10, retMessages.length)
+    }
+
     return retMessages
 }
 
