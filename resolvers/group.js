@@ -123,6 +123,13 @@ const addUserToGroup = async (parent, args, { userJWT }, info) => {
             return { errors }
         }
 
+        // now we're limiting a group to only 20 users
+        // throw an error when the groupCreator attempts to add a 21st user
+        if(currentGroup.groupMembers.length >= 20) {
+            errors.push('Your group has reached the limit of members allowed')
+            return { errors }
+        }
+
         // make sure JWT is groupCreator
         if(!(decoded._id === currentGroup.groupCreator)) {
             errors.push('User is not an admin for this group')
@@ -171,6 +178,13 @@ const addUserToGroupByEmail = async(parent, args, { userJWT }, info) => {
         }
         if(!(decoded._id === currentGroup.groupCreator)) {
             errors.push('User is not an admin for this group')
+            return { errors }
+        }
+
+        // now we're limiting a group to only 20 users
+        // throw an error when the groupCreator attempts to add a 21st user
+        if(currentGroup.groupMembers.length >= 20) {
+            errors.push('Your group has reached the limit of members allowed')
             return { errors }
         }
 
