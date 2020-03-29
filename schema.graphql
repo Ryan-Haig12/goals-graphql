@@ -16,6 +16,7 @@ type Query {
 
     calcUserScore(data: CalcUserScoreInput): [ UserScoreReport ]
     calcUserStat(userId: ID!): UserStatReport
+    calcGroupPowerRanking(groupId: ID!): GroupPowerRankingReport
     
     ping: String!
 }
@@ -220,6 +221,17 @@ type UserStatReport {
     threeMonths: TimeScoreReport
     sixMonths: TimeScoreReport
     oneYear: TimeScoreReport
+    errors: [ String ]
+}
+
+type PowerRankingLog {
+    userId: ID
+    recordsWon: Int
+}
+
+type GroupPowerRankingReport {
+    allTimeRankingsWeeks: [ PowerRankingLog ]
+    allTimeRankingsMonths: [ PowerRankingLog ]
     errors: [ String ]
 }
 

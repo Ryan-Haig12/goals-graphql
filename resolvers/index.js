@@ -5,7 +5,7 @@ const { addFinishedGoal, getFinishedGoals } = require('./finishedGoals')
 const { addGroupMessage, getGroupMessages, groupMessageSent } = require('./groupMessage')
 const { createCustomGoal, getCustomGoal, deleteCustomGoal, updateCustomGoal, getAllCustomGoalsByGroupArray } = require('./customGoal')
 const { calcUserScore } = require('./scoring')
-const { calcUserStat } = require('./stats')
+const { calcUserStat, calcGroupPowerRanking } = require('./stats')
 
 //const Group = require('../mongooseDataModels/Group')
 
@@ -28,6 +28,7 @@ const resolvers = {
 
         calcUserScore,
         calcUserStat,
+        calcGroupPowerRanking,
 
         // simple test to make sure graphql is loaded
         // also using for frontend test to look into re-usable hooks

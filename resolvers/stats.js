@@ -1,9 +1,11 @@
 const moment = require('moment')
 
+const { calcUserScore_helperFunction } = require('./scoring')
 const decodeJWT = require('../utils/decodeJWT')
 //const CustomGoal = require('../mongooseDataModels/CustomGoal')
 const FinishedGoal = require('../mongooseDataModels/FinishedGoal')
 const Goal = require('../mongooseDataModels/Goal')
+const Group = require('../mongooseDataModels/Group')
 const User = require('../mongooseDataModels/User')
 
 // this endpoint is to calculate a score report for a single user used for their user profile
@@ -87,26 +89,11 @@ const calcUserStat = async ( parent, { userId }, { userJWT }, info ) => {
     const finishedGoalsLastSixMonth = allFinishedGoals.filter(goal => sixMonth < moment(goal.timeCompleted).unix() * 1000 )
     const finishedGoalsLastYear = allFinishedGoals.filter(goal => year < moment(goal.timeCompleted).unix() * 1000 )
 
-    const oneWeek = { 
-        totalTimeLogged: 0,
-        totalPointsScored: 0,
-    }
-    const oneMonth = { 
-        totalTimeLogged: 0,
-        totalPointsScored: 0,
-    }
-    const threeMonths = { 
-        totalTimeLogged: 0,
-        totalPointsScored: 0,
-    }
-    const sixMonths = { 
-        totalTimeLogged: 0,
-        totalPointsScored: 0,
-    }
-    const oneYear = { 
-        totalTimeLogged: 0,
-        totalPointsScored: 0,
-    }
+    const oneWeek = { totalTimeLogged: 0, totalPointsScored: 0 }
+    const oneMonth = { totalTimeLogged: 0, totalPointsScored: 0 }
+    const threeMonths = { totalTimeLogged: 0, totalPointsScored: 0 }
+    const sixMonths = { totalTimeLogged: 0, totalPointsScored: 0 }
+    const oneYear = { totalTimeLogged: 0, totalPointsScored: 0 }
 
     const finishedTimes = [ finishedGoalsLastWeek, finishedGoalsLastMonth, finishedGoalsLastThreeMonth, finishedGoalsLastSixMonth, finishedGoalsLastYear ]
     const timeLogs = [ oneWeek, oneMonth, threeMonths, sixMonths, oneYear ]
@@ -134,6 +121,109 @@ const calcUserStat = async ( parent, { userId }, { userJWT }, info ) => {
     }
 }
 
+// this endpoint is to calculate a group power ranking report for a single group
+// takes in a groupId as an argument
+// returned is an object containing 2 arrays.
+// The first array is a power ranking report for all weeks the group has existed
+// The second array is a power ranking report for all months the group has existed
+const calcGroupPowerRanking = async ( parent, { groupId }, { userJWT }, info ) => {
+    // auth patron
+    let errors = []
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }
+    }
+
+    // make sure group exists, if it does get all of the userIds in the group
+    const group = await Group.findById({ _id: groupId })
+    if(!group) {
+        errors.push('Group Not Found')
+        return { errors }
+    }
+
+    // initialize arrays to be returned
+    let allTimeRankingsWeeks = group.groupMembers.map(userId => ({ userId, recordsWon: 0 }))
+    let allTimeRankingsMonths = group.groupMembers.map(userId => ({ userId, recordsWon: 0 }))
+
+    // grab every finishedGoal completed for the group
+    const allFinishedGoals = await FinishedGoal.find({ groupId }).sort('timeCompleted')
+
+    // define time, idk how many of these will be needed
+    const millisecondsInAMonth = 2592000000
+    const millisecondsInAWeek = 604800000
+    const millisecondsInADay = 86400000
+
+    // calculate how many total days, weeks, and months have been played by the group
+    const oldestTime = allFinishedGoals[0].timeCompleted
+    const youngestTime = allFinishedGoals[ allFinishedGoals.length - 1 ].timeCompleted
+    const numOfWeeks = Math.ceil(((moment(youngestTime).unix() - moment(oldestTime).unix()) * 1000) / millisecondsInAWeek)
+    const numOfDays = Math.ceil(((moment(youngestTime).unix() - moment(oldestTime).unix()) * 1000) / millisecondsInADay)
+    const numOfMonths = ((moment(youngestTime).month() - moment(oldestTime).month()) + 1)
+
+    // cycle through all weeks, get the # of weeks won for every user
+    let time = youngestTime
+    for(let i = 0; i < numOfWeeks; i++) {
+        const userScores = calcUserScore_helperFunction({
+            userIds: group.groupMembers,
+            allFinishedGoals,
+            startTime: moment(time).startOf('week').unix() * 1000,
+            endTime: moment(time).endOf('week').unix() * 1000
+        })
+
+        // if there is at least 1 record for the entire week, calc the winner of that given week
+        // increment the records won for that given user
+        if(userScores[0].score > 0) {
+            console.log(userScores[0].userId)
+            allTimeRankingsWeeks.map(log => {
+                if(log.userId === userScores[0].userId) {
+                    log.recordsWon++
+                }
+            })
+            
+        }
+
+        // after week is calculated, move back to the last week
+        time = moment(time).subtract(1, 'week')
+    }
+
+    // cycle through all months, calculate the score for every user for every month the group has played
+    time = youngestTime
+    for(let i = 0; i < numOfMonths; i++) {
+        const userScores = calcUserScore_helperFunction({
+            userIds: group.groupMembers,
+            allFinishedGoals,
+            startTime: moment(time).startOf('month').unix() * 1000,
+            endTime: moment(time).endOf('month').unix() * 1000
+        })
+
+        // if there is at least 1 record for the entire week, calc the winner of that given week
+        // increment the records won for that given user
+        if(userScores[0].score > 0) {
+            console.log(userScores[0].userId)
+            allTimeRankingsMonths.map(log => {
+                if(log.userId === userScores[0].userId) {
+                    log.recordsWon++
+                }
+            })
+            
+        }
+
+        // after week is calculated, move back to the last week
+        time = moment(time).subtract(1, 'month')
+    }
+
+    // sort all of the records by winners to losers
+    // if a user does not have a single week or month won, don't return the user log
+    allTimeRankingsWeeks.sort((a, b) => (parseInt(a.recordsWon) < parseInt(b.recordsWon)) ? 1 : -1)
+    allTimeRankingsMonths.sort((a, b) => (parseInt(a.recordsWon) < parseInt(b.recordsWon)) ? 1 : -1)
+    return {
+        allTimeRankingsWeeks: allTimeRankingsWeeks.filter(log => log.recordsWon > 0),
+        allTimeRankingsMonths: allTimeRankingsMonths.filter(log => log.recordsWon > 0)
+    }
+}
+
 module.exports = {
-    calcUserStat
+    calcUserStat,
+    calcGroupPowerRanking
 }

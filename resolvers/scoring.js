@@ -45,6 +45,39 @@ const calcUserScore = async (parent, args, { userJWT }, info) => {
     return data
 }
 
+// NOT A GRAPHQL ENDPOINT
+// this is a helper function to easily calculate userScores
+// creating for calcGroupPowerRanking inside of ./stats.js 
+const calcUserScore_helperFunction = ({ userIds, allFinishedGoals, startTime, endTime }) => {
+    let data = []
+
+    userIds.map(userId => {
+        let score = 0
+        const usersFinishedGoals = allFinishedGoals.filter(goal => goal.userId === userId)
+        usersFinishedGoals.filter(goal => {
+            const time = moment(goal.timeCompleted).unix() * 1000
+
+            if(parseInt(startTime) < time && time < parseInt(endTime)) {
+                score += goal.points * ((goal.minutesLogged / 15) * .25)
+            }
+
+            return parseInt(startTime) < time && time < parseInt(endTime)
+        })
+
+        data.push({
+            userId, score: score.toFixed(2), rank: -1
+        })
+    })
+
+    let count = 1
+    data.sort((a, b) => (parseInt(a.score) < parseInt(b.score)) ? 1 : -1)
+    data.sort((a, b) => (parseInt(a.score) < parseInt(b.score)) ? 1 : -1) // hacky solution to fix bug where 11.00 > 11.75
+    data.map(d => d.rank = count++)
+
+    return data
+}
+
 module.exports = {
     calcUserScore,
+    calcUserScore_helperFunction
 }
