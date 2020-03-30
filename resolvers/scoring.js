@@ -39,7 +39,11 @@ const calcUserScore = async (parent, args, { userJWT }, info) => {
     })
 
     let count = 1
-    data.sort((a, b) => (parseInt(a.score) < parseInt(b.score)) ? 1 : -1)
+    // for some reason, just one sort function is not enough to sort the data completely
+    // adding a second sort function ensures that a user with 12.75 will rank above a user with 12
+    data
+        .sort((a, b) => (parseInt(a.score) < parseInt(b.score)) ? 1 : -1)
+        .sort((a, b) => (parseInt(a.score) < parseInt(b.score)) ? 1 : -1)
     data.map(d => d.rank = count++)
 
     return data
