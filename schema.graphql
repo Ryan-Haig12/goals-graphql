@@ -5,7 +5,7 @@ type Query {
     loginUser(email: String!, password: String!): User!
 
     getAllGoals: [ AllDefaultGoals ]
-    getFinishedGoals(data: GetFinishedGoalsInput): [ FinishedGoal! ]
+    getFinishedGoals(data: GetFinishedGoalsInput): [ FinishedGoal ]
 
     getGroupMessages(groupId: ID!): [ GroupMessage! ]
     getGroup(groupId: ID!): Group!

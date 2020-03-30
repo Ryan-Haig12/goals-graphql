@@ -25,6 +25,9 @@ const addFinishedGoal = async (parent, args, { userJWT }, info) => {
     }
 }
 
+// for all intents and purposes, this endpoint should only be called with 1 of the arguments available
+// when doing 2+ args, the array is not being filtered out properly
+// for right now, this shouldn't be a problem as long as this is called with just 1 arg
 const getFinishedGoals = async (parent, args, { userJWT }, info) => {
     const { userId, groupId, goalId } = args.data
     let errors = []
@@ -32,10 +35,11 @@ const getFinishedGoals = async (parent, args, { userJWT }, info) => {
     const decoded = decodeJWT(userJWT)
     if(decoded.status === 'error') {
         errors.push(decoded.msg)
-        return { errors }   
+        return [{ errors }]   
     }
 
     try {
+        console.log(userId, groupId, goalId)
         let userGoals = []
         let groupGoals = []
         let goalGoals = [] // nice naming convention ryan
@@ -44,7 +48,8 @@ const getFinishedGoals = async (parent, args, { userJWT }, info) => {
         if(goalId) goalGoals = await FinishedGoal.find({ goalId })
         
         const allGoals = _.concat(userGoals, groupGoals, goalGoals)
-        const remainingGoals = _.uniqBy(allGoals, 'id')
+        // if calling with 2 args is ever needed, change this
+        const remainingGoals = _.uniqBy(allGoals, '_id')
 
         return remainingGoals
     } catch(err) {
