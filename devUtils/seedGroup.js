@@ -3,6 +3,8 @@
 // this file is to randomly generate 3-7 goals for those users in a given day
 // this is meant to create dummy data in some way\
 
+const moment = require('moment')
+
 // groupId: 5e8158d1ad22545b5a28005a
 // userIds: 
 // ['5e38fd41442ef1d73086ff13', testhaig1@haig.com
@@ -36,6 +38,7 @@ const seedData = async () => {
                 userId: id,
                 groupId: "5e8158d1ad22545b5a28005a",
                 timeCompleted: Date.now(),
+                //timeCompleted: moment().subtract(1, 'week').unix() * 1000,
                 minutesLogged: times[Math.floor(Math.random() * times.length)],
                 points: randomGoal.points
             })
