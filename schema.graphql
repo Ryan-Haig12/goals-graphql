@@ -23,7 +23,7 @@ type Query {
 
 type Mutation {
     createUser(data: CreateUserInput): User!
-    updateUser(id: ID!, data: UpdateUserInput ): User!
+    updateUser(data: UpdateUserInput): User!
     deleteUser(id: ID!): User!
 
     createGoal(data: CreateGoalInput): Goal!
@@ -53,6 +53,7 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
+    userId: ID!
     name: String
     email: String
 }

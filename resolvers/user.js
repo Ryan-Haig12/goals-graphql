@@ -187,8 +187,7 @@ const deleteUser = async (parent, args, { userJWT }, info) => {
 }
 
 const updateUser = async (parent, args, { userJWT }, info) => {
-    const { id, data } = args
-    const { name, email } = data
+    const { userId, name, email } = args.data
     let errors = []
 
     // auth patron
@@ -198,8 +197,8 @@ const updateUser = async (parent, args, { userJWT }, info) => {
         return { errors }   
     }
 
-    const user = await User.findById({ _id: id })
-    if(!user) return { errors: [ `User ${ id } not found!` ] }
+    const user = await User.findById({ _id: userId })
+    if(!user) return { errors: [ `User ${ userId } not found!` ] }
     
     if(name) user.name = name
     if(email) user.email = email
@@ -208,7 +207,7 @@ const updateUser = async (parent, args, { userJWT }, info) => {
         await user.save()
 
         return {
-            ...user, id
+            ...user._doc, id: userId
         }
     } catch (err) {
         console.log(err)
