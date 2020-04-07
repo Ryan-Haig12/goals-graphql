@@ -15,6 +15,7 @@ const resolvers = {
         loginUser,
 
         getAllGoals,
+        //getAllGoalsV2,
 
         getFinishedGoals,
         getCustomGoal,

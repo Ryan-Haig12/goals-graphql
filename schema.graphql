@@ -5,6 +5,7 @@ type Query {
     loginUser(email: String!, password: String!): User!
 
     getAllGoals: [ AllDefaultGoals ]
+    getAllGoalsV2(groupId: ID!): AllGroupGoals
     getFinishedGoals(data: GetFinishedGoalsInput): [ FinishedGoal ]
 
     getGroupMessages(groupId: ID!): [ GroupMessage! ]
@@ -78,7 +79,8 @@ input UpdateCustomGoalInput {
     points: Int
     category: String
     groupId: String
-    customGoalCreator: String!
+    enabled: Boolean
+    customGoalId: ID!
 }
 
 input UpdateGoalInput {
@@ -158,6 +160,7 @@ type CustomGoal {
     id: ID
     title: String
     points: Int
+    enabled: Boolean
     category: String
     errors: [ String ]
     groupId: ID
@@ -172,6 +175,12 @@ type AllDefaultGoals {
 type AllGroupsCustomGoals {
     groupId: ID
     customGoals: [ CustomGoal ]
+}
+
+type AllGroupGoals {
+    defaultGoals: [ Goal ]
+    customGoals: [ CustomGoal ]
+    errors: [ String ]
 }
 
 type TotalScoreGroup {

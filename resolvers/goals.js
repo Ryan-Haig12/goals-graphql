@@ -1,6 +1,7 @@
 const _ = require('lodash')
 
 const Goal = require('../mongooseDataModels/Goal')
+//const Group = require('../mongooseDataModels/Group')
 
 const decodeJWT = require('../utils/decodeJWT')
 
@@ -121,9 +122,36 @@ const getAllGoals = async (parent, args, { userJWT }, info) => {
     return data
 }
 
+// SCRAPPING FOR NOW
+// the intention of this endpoint was to have an easy way to return enabled/disabled goals
+// as of now, I don't believe that defaultGoals should be disabled like I thought most of the project up to 5 mins ago
+// due to the fact that customGoals are much easier to enable/disable, I'm going to stick with JUST those for now
+// refactor to getAlLGoalsV2
+// takes in a groupId and returns an object with 3 arrays
+// the first is defaultGoals for all of the enabled defaultGoals
+// the second is customGoals for all of the enabled/disabled customGoals
+// const getAllGoalsV2 = async (parent, { groupId }, { userJWT }, info) => {
+//     let errors = []
+//     const decoded = decodeJWT(userJWT)
+//     if(decoded.status === 'error') {
+//         errors.push(decoded.msg)
+//         return { errors }
+//     }
+
+//     // ensure that the group exists 
+//     if(!groupId.length > 0) return { errors: [ 'No GroupId provided you sent an empty groupId you absolute waste of space'] }
+//     const group = await Group.findById({ _id: groupId })
+//     if(!group) return { errors: [ `Group ${ groupId } not found` ] }
+
+//     // grab all of the default and custom goals
+
+//     // filter out default goals that are enabled=false in the 
+// }
+
 module.exports = {
     createGoal,
     updateGoal,
     deleteGoal,
-    getAllGoals
+    getAllGoals,
+    //getAllGoalsV2
 }

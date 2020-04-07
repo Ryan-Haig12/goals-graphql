@@ -181,10 +181,13 @@ const updateCustomGoal = async (parent, args, { userJWT }, info) => {
     }
 
     try {
-        const customGoal = await CustomGoal.findByIdAndUpdate({ _id: args.data.customGoalCreator }, {
-            ...args.data
+        let customGoal = await CustomGoal.findByIdAndUpdate({ _id: args.data.customGoalId }, { ...args.data })
+
+        // update local object to return the new data
+        delete args.data.customGoalId // <- makes the for each below SLIGHTLY faster, but I had no idea delete was a keyword
+        Object.keys(args.data).forEach(key => {
+            if(customGoal._doc[key] != args.data[key]) customGoal._doc[key] = args.data[key]
         })
-        await customGoal.save()
     
         return customGoal
     } catch(err) {
