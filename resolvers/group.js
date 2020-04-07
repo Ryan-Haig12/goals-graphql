@@ -243,6 +243,43 @@ const deleteGroup = async (parent, args, { userJWT }, info) => {
     }
 }
 
+// takes in an array of userIds and removes each userId from the given groupId
+const removeUsersFromGroupByUserId = async (parent, args, { userJWT }, info) => {
+    const { groupId, userIds } = args.data
+    let errors = []
+
+    // auth patron
+    const decoded = decodeJWT(userJWT)
+    if(decoded.status === 'error') {
+        errors.push(decoded.msg)
+        return { errors }   
+    }
+
+    if(!groupId.length) return { errors: [ 'groupId is an empty string bruh' ] }
+    if(!userIds.length) return { errors: [ 'userIds is an empty array bruh' ] }
+
+    try {
+        let currentGroup = await Group.findOne({ _id: groupId })
+        if(!currentGroup) return { errors: [ `Group ${ groupId } not found` ] }
+
+        // make sure JWT is groupCreator
+        if(!(decoded._id === currentGroup.groupCreator)) {
+            errors.push('User is not an admin for this group')
+            return { errors }
+        }
+        if(userIds.includes(decoded._id)) return { errors: [ 'You are attempting to remove yourself from your own group, stahp it' ] }
+
+        const updatedUsers = currentGroup.groupMembers = currentGroup.groupMembers.filter(memberId => !userIds.includes(memberId))
+        await Group.findByIdAndUpdate({ _id: groupId }, { groupMembers: updatedUsers })
+
+        currentGroup.groupMembers = updatedUsers
+        return currentGroup
+    } catch(err) {
+        console.log(err)
+        return { errors: [ err ] }
+    }
+}
+
 module.exports = {
     createGroup,
     updateGroup,
@@ -251,4 +288,5 @@ module.exports = {
     addUserToGroup,
     addUserToGroupByEmail,
     deleteGroup,
+    removeUsersFromGroupByUserId,
 }

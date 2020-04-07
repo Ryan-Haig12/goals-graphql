@@ -1,13 +1,11 @@
 const { createUser, getUser, getUserByJWT, getMultipleUsersById, loginUser, deleteUser, updateUser } = require('./user')
 const { createGoal, updateGoal, deleteGoal, getAllGoals } = require('./goals')
-const { createGroup, updateGroup, getGroup, getAllUsersGroups, addUserToGroup, addUserToGroupByEmail, deleteGroup } = require('./group')
+const { createGroup, updateGroup, getGroup, getAllUsersGroups, addUserToGroup, addUserToGroupByEmail, deleteGroup, removeUsersFromGroupByUserId } = require('./group')
 const { addFinishedGoal, getFinishedGoals } = require('./finishedGoals')
 const { addGroupMessage, getGroupMessages, groupMessageSent } = require('./groupMessage')
 const { createCustomGoal, getCustomGoal, deleteCustomGoal, updateCustomGoal, getAllCustomGoalsByGroupArray } = require('./customGoal')
 const { calcUserScore } = require('./scoring')
 const { calcUserStat, calcGroupPowerRanking } = require('./stats')
-
-//const Group = require('../mongooseDataModels/Group')
 
 const resolvers = {
     Query: {
@@ -49,6 +47,7 @@ const resolvers = {
         addUserToGroup,
         addUserToGroupByEmail,
         deleteGroup,
+        removeUsersFromGroupByUserId,
 
         addFinishedGoal,
 

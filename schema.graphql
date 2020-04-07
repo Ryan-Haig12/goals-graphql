@@ -35,6 +35,7 @@ type Mutation {
     addUserToGroup(data: AddUserToGroupInput): Group!
     addUserToGroupByEmail(data: AddUserToGroupInput): Group!
     deleteGroup(id: ID!): Group!
+    removeUsersFromGroupByUserId(data: RemoveUsersFromGroupInput): Group!
 
     addFinishedGoal(data: AddFinishedGoalInput): FinishedGoal!
 
@@ -128,6 +129,11 @@ input CalcUserScoreInput {
     groupId: ID!
     startTime: String!
     endTime: String!
+}
+
+input RemoveUsersFromGroupInput {
+    groupId: ID!
+    userIds: [ ID ]!
 }
 
 type User {
