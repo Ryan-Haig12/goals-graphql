@@ -72,28 +72,28 @@ const getAllUsersGroups = async(parent, args, { userJWT }, info) => {
 }
 
 const updateGroup = async (parent, args, { userJWT }, info) => {
-    const { id, data } = args
-    const { groupName } = data
+    const { groupId, groupName } = args.data
     let errors = []
 
     const decoded = decodeJWT(userJWT)
-
     if(decoded.status === 'error') {
         errors.push(decoded.msg)
         return { errors }   
     }
     
     try {
-        const currentGroup = await Group.findById({ _id: id })
+        const group = await Group.findById({ _id: groupId })
+        if(!group) return { errors: [ `Group ${ groupId } not found!` ] }
 
         // if user is the creator, update group
-        if(decoded._id === currentGroup.groupCreator){
-            await Group.findByIdAndUpdate({ _id: id }, {
+        if(decoded._id === group.groupCreator){
+            await Group.findByIdAndUpdate({ _id: groupId }, {
                 groupName
             })
             
-            return { ...currentGroup._doc, groupName, id: currentGroup._doc._id }
+            return { ...group._doc, groupName, id: group._doc._id }
         }
+        return { errors: [ 'You did not create this group' ] }
     } catch(err) {
         console.log(err)
     }
