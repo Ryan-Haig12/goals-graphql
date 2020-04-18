@@ -39,7 +39,6 @@ const getFinishedGoals = async (parent, args, { userJWT }, info) => {
     }
 
     try {
-        console.log(userId, groupId, goalId)
         let userGoals = []
         let groupGoals = []
         let goalGoals = [] // nice naming convention ryan

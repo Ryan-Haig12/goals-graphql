@@ -174,7 +174,6 @@ const calcGroupPowerRanking = async ( parent, { groupId }, { userJWT }, info ) =
         // if there is at least 1 record for the entire week, calc the winner of that given week
         // increment the records won for that given user
         if(userScores[0].score > 0) {
-            console.log(userScores[0].userId)
             allTimeRankingsWeeks.map(log => {
                 if(log.userId === userScores[0].userId) {
                     log.recordsWon++
@@ -200,13 +199,11 @@ const calcGroupPowerRanking = async ( parent, { groupId }, { userJWT }, info ) =
         // if there is at least 1 record for the entire week, calc the winner of that given week
         // increment the records won for that given user
         if(userScores[0].score > 0) {
-            console.log(userScores[0].userId)
             allTimeRankingsMonths.map(log => {
                 if(log.userId === userScores[0].userId) {
                     log.recordsWon++
                 }
             })
-            
         }
 
         // after week is calculated, move back to the last week

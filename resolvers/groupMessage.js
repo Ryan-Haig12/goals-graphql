@@ -74,7 +74,6 @@ const getGroupMessages = async (parent, args, { userJWT, pubsub }, info) => {
     //     retMessages.push(message)
     //     return true
     // })
-    console.log(groupsMessages)
 
     groupsMessages.sort((a, b) => (a.timeWritten > b.timeWritten) ? 1 : -1)
 
