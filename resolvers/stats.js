@@ -149,6 +149,9 @@ const calcGroupPowerRanking = async ( parent, { groupId }, { userJWT }, info ) =
     // grab every finishedGoal completed for the group
     const allFinishedGoals = await FinishedGoal.find({ groupId }).sort('timeCompleted')
 
+    // don't look for finishedGoals stats if there aren't any to return
+    if(!allFinishedGoals.length) return
+
     // define time, idk how many of these will be needed
     const millisecondsInAMonth = 2592000000
     const millisecondsInAWeek = 604800000
