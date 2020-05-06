@@ -1,5 +1,5 @@
 # Goals-Graphql
-This is the GraphQL API dealing with the goals project. To see the rules of the goals p
+This is the GraphQL API dealing with the goals project.
 
 # Goals Overview
 The goals game derrives from a game my coworker plays with his friends. The idea is to have different goals/tasks for the players in the group to aspire to complete on a day to day basis.
