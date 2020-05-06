@@ -31,7 +31,7 @@ mutation {
 }
 ```
 
-You should recieve a response with a jwt token. To ensure registration worked:
+You should recieve a response with a jwt token. To ensure registration worked, run this query with your new jwt in the http headers:
 ```graphql
 query {
   getUser(email: "haigryan@gmail.com") {
@@ -48,3 +48,4 @@ query {
   "Authorization": "Bearer { JWT_TOKEN_HERE }"
 }
 ```
+
