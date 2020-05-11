@@ -88,15 +88,17 @@ const calcUserStat = async ( parent, { userId }, { userJWT }, info ) => {
     const finishedGoalsLastThreeMonth = allFinishedGoals.filter(goal => threeMonth < moment(goal.timeCompleted).unix() * 1000 )
     const finishedGoalsLastSixMonth = allFinishedGoals.filter(goal => sixMonth < moment(goal.timeCompleted).unix() * 1000 )
     const finishedGoalsLastYear = allFinishedGoals.filter(goal => year < moment(goal.timeCompleted).unix() * 1000 )
+    const finishedGoalsAllTime = allFinishedGoals
 
     const oneWeek = { totalTimeLogged: 0, totalPointsScored: 0 }
     const oneMonth = { totalTimeLogged: 0, totalPointsScored: 0 }
     const threeMonths = { totalTimeLogged: 0, totalPointsScored: 0 }
     const sixMonths = { totalTimeLogged: 0, totalPointsScored: 0 }
     const oneYear = { totalTimeLogged: 0, totalPointsScored: 0 }
+    const allTime = { totalTimeLogged: 0, totalPointsScored: 0 }
 
-    const finishedTimes = [ finishedGoalsLastWeek, finishedGoalsLastMonth, finishedGoalsLastThreeMonth, finishedGoalsLastSixMonth, finishedGoalsLastYear ]
-    const timeLogs = [ oneWeek, oneMonth, threeMonths, sixMonths, oneYear ]
+    const finishedTimes = [ finishedGoalsLastWeek, finishedGoalsLastMonth, finishedGoalsLastThreeMonth, finishedGoalsLastSixMonth, finishedGoalsLastYear, finishedGoalsAllTime ]
+    const timeLogs = [ oneWeek, oneMonth, threeMonths, sixMonths, oneYear, allTime ]
 
     let log = 0
     for(const time in finishedTimes) {
@@ -118,6 +120,7 @@ const calcUserStat = async ( parent, { userId }, { userJWT }, info ) => {
         threeMonths,
         sixMonths,
         oneYear,
+        allTime,
     }
 }
 
