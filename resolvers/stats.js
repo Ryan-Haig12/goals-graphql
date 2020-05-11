@@ -37,7 +37,7 @@ const calcUserStat = async ( parent, { userId }, { userJWT }, info ) => {
     // grab the last 5 finishedGoals the user completed
     // grab them by their actual goal data
     // returned where the 0 el is the most recent and 4 is the 
-    const _lastFiveFinishedGoals = allFinishedGoals.slice(Math.max(allFinishedGoals.length - 6, 0))
+    const _lastFiveFinishedGoals = allFinishedGoals.slice(Math.max(allFinishedGoals.length - 5, 0))
     const allDefaultGoals = await Goal.find({})
     let lastFiveFinishedGoals = []
     _lastFiveFinishedGoals.map(goal => {
