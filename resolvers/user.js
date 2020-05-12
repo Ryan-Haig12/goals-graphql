@@ -68,6 +68,7 @@ const getUser = async (parent, args, { userJWT }, info) => {
     if(id) {
         try {
             const user = await User.findById({ _id: id })
+            user.password = null
             return user
         } catch(err) {
             errors.push(`User with id ${ id } not found`)
@@ -78,6 +79,7 @@ const getUser = async (parent, args, { userJWT }, info) => {
     if(email) {
         try {
             const user = await User.findOne({ email })
+            user.password = null
             if(user !== null) return user
 
             errors.push(`User with email ${ email } not found`)
