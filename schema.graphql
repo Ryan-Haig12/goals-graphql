@@ -234,6 +234,7 @@ type UserStatReport {
     totalTimeLogged: Int
     totalPointsScored: Float
     favoriteGoal: Goal
+    favoriteGoalCount: Int
     oneWeek: TimeScoreReport
     oneMonth: TimeScoreReport
     threeMonths: TimeScoreReport

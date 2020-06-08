@@ -65,11 +65,11 @@ const calcUserStat = async ( parent, { userId }, { userJWT }, info ) => {
             goalsByLogs[goal.goalId.toString()] += 1
         }
     })
-    let largestGoal = 0
+    let favoriteGoalCount = 0
     let favoriteGoalId = ''
     for(const goal in goalsByLogs) {
-        if(!largestGoal || goalsByLogs[goal] > largestGoal) {
-            largestGoal = goalsByLogs[goal]
+        if(!favoriteGoalCount || goalsByLogs[goal] > favoriteGoalCount) {
+            favoriteGoalCount = goalsByLogs[goal]
             favoriteGoalId = goal
         } 
     }
@@ -114,6 +114,7 @@ const calcUserStat = async ( parent, { userId }, { userJWT }, info ) => {
         totalGoalsCompleted: allFinishedGoals.length,
         totalTimeLogged,
         favoriteGoal,
+        favoriteGoalCount,
         totalPointsScored,
         oneWeek,
         oneMonth,
